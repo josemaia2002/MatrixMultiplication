@@ -16,16 +16,21 @@ int main(int argc, char const *argv[]) {
 	fscanf(fptr, "%d", &m1);
 	fscanf(fptr, "%d", &n1);
 
-	int* vector1;
+	int** vector1;
 	int size1 = m1*n1;
-	vector1 = (int*)malloc(size1 * sizeof(int));
+	vector1 = (int**)malloc(size1 * sizeof(int*));
+	for(int i = 0; i < m1; i++) {
+		vector1[i] = (int*)malloc(n1 * sizeof(int));
+	}
 
 	if(vector1 == NULL){
 		printf("ERROR\n");
 	}
 	else {
-		for(int i = 0; i < size1; i++) {
-			fscanf(fptr, "%d", &vector1[i]);		
+		for(int i = 0; i < m1; i++) {
+			for(int j = 0; j < n1; j++) {
+				fscanf(fptr, "%d", &vector1[i][j]);		
+			}
 		}	
 	}
 
@@ -42,58 +47,43 @@ int main(int argc, char const *argv[]) {
 	fscanf(fptr, "%d", &m2);
 	fscanf(fptr, "%d", &n2);
 
-	int* vector2;
+	int** vector2;
 	int size2 = m2*n2;
-	vector2 = (int*)malloc(size2 * sizeof(int));
+	vector2 = (int**)malloc(size2 * sizeof(int*));
+	for(int i = 0; i < m2; i++) {
+		vector2[i] = (int*)malloc(n2 * sizeof(int));
+	}
 
 	if(vector2 == NULL){
 		printf("ERROR\n");
 	}
 	else {
-		for(int i = 0; i < size2; i++) {
-			fscanf(fptr, "%d", &vector2[i]);		
+		for(int i = 0; i < m2; i++) {
+			for(int j = 0; j < n2; j++) {
+				fscanf(fptr, "%d", &vector2[i][j]);		
+			}
 		}	
 	}
 
 	fclose(fptr);
 
 	// Matrix resultante
-	int* result;
+	int** result;
 	int size3 = m1*n2;
-	result = (int*)malloc(size3 * sizeof(int));
-
-	for(int i = 0; i <= m1; i+=2) {
-		for(int j = 0; j < n2; j++) {
-			int prod1, prod2, sum;
-			prod1 = vector1[i] * vector2[j];
-			prod2 = vector1[i+1] * vector2[j+2];
-			sum = prod1 + prod2;
-			printf("%d\n", sum);
-		}			
-	}	
-
-	/*
+	result = (int**)malloc(size3 * sizeof(int*));
+	for(int i = 0; i < m1; i++) {
+		result[i] = (int*)malloc(n2 * sizeof(int));
+	}
 
 	for(int i = 0; i < m1; i++) {
 		for(int j = 0; j < n2; j++) {
-			result[i] = 
-			vector1[i];
-			vector2[i];
+			int sum = 0;
+			for(int k = 0; k < m2; k++) {
+				sum = sum + vector1[i][k] * vector2[k][j];
+			}
+			result[i][j] = sum;
 		}
 	}
-
-*/
-/*
-	for(int i = 0; i < size1; i++) {
-		printf("%d\n", vector1[i]);
-	}
-
-	printf("#################\n");
-
-	for(int i = 0; i < size2; i++) {
-		printf("%d\n", vector2[i]);
-	}	
-*/
 
 	return 0;
 }
