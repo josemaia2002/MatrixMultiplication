@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 int main(int argc, char const *argv[]) {
 	int m1, n1, m2, n2;
@@ -67,7 +68,11 @@ int main(int argc, char const *argv[]) {
 
 	fclose(fptr);
 
-	// Matrix resultante
+	// Start measuring time
+    struct timespec begin, end; 
+    clock_gettime(CLOCK_REALTIME, &begin);
+    
+    // Calculation of the result
 	int** result;
 	int size3 = m1*n2;
 	result = (int**)malloc(size3 * sizeof(int*));
@@ -84,8 +89,15 @@ int main(int argc, char const *argv[]) {
 			result[i][j] = sum;
 		}
 	}
-
-	// Result matrix
+    
+    // Stop measuring time and calculate the elapsed time
+    clock_gettime(CLOCK_REALTIME, &end);
+    long seconds = end.tv_sec - begin.tv_sec;
+    long nanoseconds = end.tv_nsec - begin.tv_nsec;
+    double elapsed = seconds + nanoseconds*1e-9;
+    
+    
+	// Writing the result to the file
 	fptr = fopen("result.txt", "w");
 
 	if(fptr == NULL) {
@@ -97,15 +109,17 @@ int main(int argc, char const *argv[]) {
 	fprintf(fptr, "%d ", m1);
 	fprintf(fptr, "%d\n", n2);
 
-	// Filling the matrix
 	for(int i = 0; i < m1; i++) {
 		for(int j = 0; j < n2; j++) {
 			fprintf(fptr, "c%d%d ", i+1, j+1);
 			fprintf(fptr, "%d\n", result[i][j]);	
 		}
 	}
+	fprintf(fptr, "%.3f\n", elapsed);
 
 	fclose(fptr);
+
+	
 
 	return 0;
 }
