@@ -85,5 +85,27 @@ int main(int argc, char const *argv[]) {
 		}
 	}
 
+	// Result matrix
+	fptr = fopen("result.txt", "w");
+
+	if(fptr == NULL) {
+		printf("ERROR!\n");
+		exit(0);
+	}
+
+	// Indicates the dimensions in the file
+	fprintf(fptr, "%d ", m1);
+	fprintf(fptr, "%d\n", n2);
+
+	// Filling the matrix
+	for(int i = 0; i < m1; i++) {
+		for(int j = 0; j < n2; j++) {
+			fprintf(fptr, "c%d%d ", i+1, j+1);
+			fprintf(fptr, "%d\n", result[i][j]);	
+		}
+	}
+
+	fclose(fptr);
+
 	return 0;
 }
