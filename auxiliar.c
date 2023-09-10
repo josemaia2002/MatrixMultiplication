@@ -26,6 +26,7 @@ int main(int argc, char const *argv[]) {
 	// Filling the matrix
 	for(int i = 0; i < (m1*n1); i++) {
 		fprintf(fptr, "%d\n", (i+1));	
+		// mat1[i][j] = rand() % 10;
 	}
 
 	fclose(fptr);
@@ -45,6 +46,7 @@ int main(int argc, char const *argv[]) {
 	// Filling the matrix
 	for(int i = 0; i < (m2*n2); i++) {
 		fprintf(fptr, "%d\n", (i+1));	
+		// mat2[i][j] = rand() % 10;
 	}
 
 	fclose(fptr);

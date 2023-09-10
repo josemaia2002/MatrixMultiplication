@@ -17,6 +17,7 @@ int main(int argc, char const *argv[]) {
 	fscanf(fptr, "%d", &m1);
 	fscanf(fptr, "%d", &n1);
 
+	// Declaration
 	int** vector1;
 	int size1 = m1*n1;
 	vector1 = (int**)malloc(size1 * sizeof(int*));
@@ -24,6 +25,7 @@ int main(int argc, char const *argv[]) {
 		vector1[i] = (int*)malloc(n1 * sizeof(int));
 	}
 
+	// Filling the matrix
 	if(vector1 == NULL){
 		printf("ERROR\n");
 	}
@@ -48,6 +50,7 @@ int main(int argc, char const *argv[]) {
 	fscanf(fptr, "%d", &m2);
 	fscanf(fptr, "%d", &n2);
 
+	// Declaration
 	int** vector2;
 	int size2 = m2*n2;
 	vector2 = (int**)malloc(size2 * sizeof(int*));
@@ -55,6 +58,7 @@ int main(int argc, char const *argv[]) {
 		vector2[i] = (int*)malloc(n2 * sizeof(int));
 	}
 
+	// Filling the matrix
 	if(vector2 == NULL){
 		printf("ERROR\n");
 	}
@@ -118,8 +122,6 @@ int main(int argc, char const *argv[]) {
 	fprintf(fptr, "%.3f\n", elapsed);
 
 	fclose(fptr);
-
-	
 
 	return 0;
 }
