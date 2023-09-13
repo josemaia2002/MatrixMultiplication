@@ -23,7 +23,6 @@ void matrix_read() {
 			scanf("%d" , &mat2[i][j]);
 		}
 	}
-
 }
 
 void print_matrix(int x[10][10]) {
@@ -79,3 +78,5 @@ int main() {
 
 	return 0;
 }
+
+// 1 1 1 1 1 1 1 1 1
