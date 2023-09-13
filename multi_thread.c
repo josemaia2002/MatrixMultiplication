@@ -1,79 +1,81 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
 #include <pthread.h>
 
-// maximum size of matrix
-#define MAX 100
+int number_threads;
+int mat1[10][10], mat2[10][10], res[10][10];
+int m,n;
 
-// maximum number of threads
-#define MAX_THREAD 100
+void matrix_read() {
+	int i, j;
+	printf("Enter size of matrix\n");
+	scanf("%d %d", &m, &n);
 
-int matA[MAX][MAX];
-int matB[MAX][MAX];
-int matC[MAX][MAX];
-int step_i = 0;
-
-void* multi(void* arg) {
-    int i = step_i++; //i denotes row number of resultant matC
-   
-    for(int j = 0; j < MAX; j++) {
-		for(int k = 0; k < MAX; k++) {
-        	matC[i][j] += matA[i][k] * matB[k][j];
-    	}
-    }
-}
-
-// Driver Code
-int main() {
-	// Generating random values in matA and matB
-	for(int i = 0; i < MAX; i++) {
-		for(int j = 0; j < MAX; j++) {
-			matA[i][j] = rand() % 10;
-			matB[i][j] = rand() % 10;
+	printf("Enter matrix 1\n");
+	for(i = 0; i < m; i++) {
+		for(j = 0; j < n; j++){
+			scanf("%d" , &mat1[i][j]);
 		}
 	}
 
+	printf("Enter matrix 2\n");
+	for(i = 0; i < m; i++) {
+		for(j = 0; j < n; j++){
+			scanf("%d" , &mat2[i][j]);
+		}
+	}
 
-	// Displaying matA
-	printf("\nMatrix A\n");
+}
 
-	for(int i = 0; i < MAX; i++) {
-		for(int j = 0; j < MAX; j++)
-			printf("%d ", matA[i][j]);
+void print_matrix(int x[10][10]) {
+	int i, j;
+	for(i = 0; i < m; i++) {
+		for(j = 0; j < n; j++) {
+			printf("%d ", x[i][j]);
+		}
 		printf("\n");
 	}
+}
 
-	// Displaying matB
-	printf("\nMatrix B\n");
+void * multiplication(void *arg) {
+	long int num = (long int)arg;
+	int i, j, k;
 
-	for(int i = 0; i < MAX; i++) {
-		for(int j = 0; j < MAX; j++)
-			printf("%d ", matB[i][j]);
-		printf("\n");
+	// Matrix multiplication
+	int from = (num*m)/number_threads;
+	int to = ((num+1)*m)/number_threads;
+
+	printf("\n From=%d To=%d\n", from, to);
+	for(i = from; i < to; i++) {
+		for(j = 0; j < n; j++) {
+			res[i][j] = 0;
+			for(k = 0; k < n; k++) {
+				res[i][j] += mat1[i][k] * mat2[k][j];				
+			}
+			printf("%d ", res[i][j]);
+		}
 	}
 
-	// declaring four threads
-	pthread_t threads[MAX_THREAD];
+	printf("\nMatrix by thread %ld: \n", num);
+}
 
-	// Creating four threads, each evaluating its own part
-	for(int i = 0; i < MAX_THREAD; i++) {
-		int* p;
-		pthread_create(&threads[i], NULL, multi, (void*)(p));
+int main() {
+	long int i, j;
+	pthread_t tid[10];
+
+	matrix_read();
+
+	printf("Enter number of threads\n");
+	scanf("%d", &number_threads);
+
+	// Create threads
+	for(i = 0; i < number_threads; i++) {
+		pthread_create(&tid[i], NULL, multiplication, (void*)i);
 	}
 
-	// joining and waiting for all threads to complete
-	for(int i = 0; i < MAX_THREAD; i++)
-		pthread_join(threads[i], NULL);
-
-	// Displaying the result matrix
-	printf("\nMultiplication of A and B\n");
-
-	for(int i = 0; i < MAX; i++) {
-		for(int j = 0; j < MAX; j++)
-			printf("%d ", matC[i][j]);
-		printf("\n");
-	}
+	// Join threads
+	for(j = 0; j < number_threads; j++) {
+		pthread_join(tid[j], NULL);
+	}	
 
 	return 0;
 }
