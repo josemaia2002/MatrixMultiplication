@@ -2,6 +2,7 @@
 #include <vector>
 #include <pthread.h>
 #include <stdlib.h>
+#include <time.h>
 
 using namespace std;
 
@@ -32,9 +33,13 @@ void * multiplication(void *arg) {
 	fprintf(res_file, "%d\n", m1);
 	fprintf(res_file, "%d\n", n2);
 
+	// Start measuring time
+    struct timespec begin, end; 
+    clock_gettime(CLOCK_REALTIME, &begin);      
+
 	// Matrix multiplication
 	int from = (num*m1)/number_threads;
-	int to = ((num+1)*m1)/number_threads;
+	int to = ((num+1)*m1)/number_threads;	
 
 	for(i = from; i < to; i++) {
 		for(j = 0; j < n2; j++) {
@@ -45,6 +50,14 @@ void * multiplication(void *arg) {
 			fprintf(res_file, "%d\n", res[i][j]);	
 		}
 	}
+
+	// Stop measuring time and calculate the elapsed time
+    clock_gettime(CLOCK_REALTIME, &end);
+    long seconds = end.tv_sec - begin.tv_sec;
+    long nanoseconds = end.tv_nsec - begin.tv_nsec;
+    double elapsed = seconds + nanoseconds*1e-9;
+    
+	fprintf(res_file, "%.3f\n", elapsed);
 }
 
 int main(int argc, char const *argv[]) {
@@ -111,7 +124,6 @@ int main(int argc, char const *argv[]) {
 		sprintf(filename, "results%d.txt", i);
 		files[i] = fopen(filename, "w");
 	}	
-
 
 	// Create threads
 	for(i = 0; i < number_threads; i++) {
