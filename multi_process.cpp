@@ -9,11 +9,66 @@
 using namespace std;
 
 int m1, n1, m2, n2;
+FILE* fptr;
 FILE* res_file;
 
 int main(int argc, char const *argv[]) {
-	int number_elements = atoi(argv[1]);
-	int number_process = atoi(argv[2]);
+	vector<vector<int>> mat1;
+	vector<vector<int>> mat2;
+	vector<vector<int>> res;
+
+	// First matrix
+	fptr = fopen(argv[1], "r");
+
+	if(fptr == NULL) {
+		printf("ERROR!\n");
+		exit(0);
+	}
+
+	fscanf(fptr, "%d", &m1);
+	fscanf(fptr, "%d", &n1);
+
+	mat1.resize(m1, vector<int>(n1));
+
+	int temp; // Stores a temp value that will be assigned to an element
+	// Filling the matrix
+	for(int i = 0; i < m1; i++) {
+		for(int j = 0; j < n1; j++) {
+			fscanf(fptr, "%d", &temp);		
+			mat1[i][j] = temp;
+		}
+	}	
+
+	fclose(fptr);
+
+
+	// Second matrix
+	fptr = fopen(argv[2], "r");
+
+	if(fptr == NULL) {
+		printf("ERROR!\n");
+		exit(0);
+	}
+
+	fscanf(fptr, "%d", &m2);
+	fscanf(fptr, "%d", &n2);
+
+	mat2.resize(m2, vector<int>(n2));
+
+	// Filling the matrix
+	for(int i = 0; i < m2; i++) {
+		for(int j = 0; j < n2; j++) {
+			fscanf(fptr, "%d", &temp);		
+			mat2[i][j] = temp;
+		}
+	}	
+
+	fclose(fptr);
+
+	// Setting the size of the result matrix
+	res.resize(m1, vector<int>(n2));
+
+	int number_process = atoi(argv[3]);
 
 	FILE *files[number_process];
 	for(int i = 0; i < number_process; i++) {
@@ -22,36 +77,21 @@ int main(int argc, char const *argv[]) {
 		files[i] = fopen(filename, "w");
 	}	
 
-	vector<vector<int>> mat1;
-	vector<vector<int>> mat2;
-	vector<vector<int>> res;
-
-	m1 = n1 = m2 = n2 = 3;
-
-
-	mat1.resize(m1, vector<int>(n1));
-	for(int i = 0; i < m1; i++)
-		for(int j = 0; j < n1; j++)
-			mat1[i][j] = i+j;
-
-	mat2.resize(m2, vector<int>(n2));
-	for(int i = 0; i < m2; i++)
-		for(int j = 0; j < n2; j++)
-			mat2[i][j] = i+j;
-
-
-	res.resize(m1, vector<int>(n2));
-
+	// Create the child processes to calculate the result
 	for(int current_process = 0; current_process < number_process; current_process++) {
 		int i, j, k;
 		if(fork() == 0) {	
-			printf("Current process: %d\n", current_process);
-
 			char filename[20];
 			sprintf(filename, "results%d.txt", current_process);
 			res_file = fopen(filename, "w");
 
-			fprintf(res_file, "[son] pid %d from [parent] pid %d\n", getpid(), getppid());
+			// Indicates the dimensions in the file
+			fprintf(res_file, "%d\n", m1);
+			fprintf(res_file, "%d\n", n2);
+
+			// Start measuring time
+		    struct timespec begin, end; 
+		    clock_gettime(CLOCK_REALTIME, &begin);    
 
 			int from = (current_process*m1)/number_process;
 			int to = ((current_process+1)*m1)/number_process;
@@ -65,35 +105,14 @@ int main(int argc, char const *argv[]) {
 					fprintf(res_file, "%d\n", res[i][j]);	
 				}
 			}
-			exit(0);
-		}
-	}
 
-	for(int i = 0; i < number_process; i++) // loop will run n times (n=5)
-		wait(NULL);
-
-
-
-/*
-	for(int i = 0; i < number_process; i++) { // loop will run n times (n=5)
-		if(fork() == 0) {
-			// printf("[son] pid %d from [parent] pid %d\n", getpid(), getppid());
-			int sum = 0;
-
-			int from = (i*number_elements)/number_process;
-			int to = ((i+1)*number_elements)/number_process;
-	
-			for(int j = from; j < to; j++) {
-				sum += v[j];
-			}
-
-			char filename[20];
-			sprintf(filename, "results%d.txt", i);
-
-			res_file = fopen(filename, "w");
-
-			// printf("Soma = %d\n", sum);
-			fprintf(res_file, "%d\n", sum);	
+			// Stop measuring time and calculate the elapsed time
+		    clock_gettime(CLOCK_REALTIME, &end);
+		    long seconds = end.tv_sec - begin.tv_sec;
+		    long nanoseconds = end.tv_nsec - begin.tv_nsec;
+		    double elapsed = seconds + nanoseconds*1e-9;
+		    
+			fprintf(res_file, "%.3f\n", elapsed);
 
 			exit(0);
 		}
@@ -101,8 +120,5 @@ int main(int argc, char const *argv[]) {
 
 	for(int i = 0; i < number_process; i++) // loop will run n times (n=5)
 		wait(NULL);
-
-*/
-
 
 }
