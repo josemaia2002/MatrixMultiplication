@@ -41,6 +41,8 @@ void * multiplication(void *arg) {
 	int from = (num*m1)/number_threads;
 	int to = ((num+1)*m1)/number_threads;	
 
+	printf("from %d to  %d\n", from, to);
+
 	for(i = from; i < to; i++) {
 		for(j = 0; j < n2; j++) {
 			res[i][j] = 0;
