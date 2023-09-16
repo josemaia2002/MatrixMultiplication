@@ -19,8 +19,8 @@ void * multiplication(void *arg) {
 	long int num = (long int)arg;
 	int i, j, k;
 
-	char filename[20];
-	sprintf(filename, "results%ld.txt", num);
+	char filename[40];
+	sprintf(filename, "data/thread/results%ld.txt", num);
 
 
 	res_file = fopen(filename, "w");
@@ -41,8 +41,6 @@ void * multiplication(void *arg) {
 	int from = (num*m1)/number_threads;
 	int to = ((num+1)*m1)/number_threads;	
 
-	printf("from %d to  %d\n", from, to);
-
 	for(i = from; i < to; i++) {
 		for(j = 0; j < n2; j++) {
 			res[i][j] = 0;
@@ -60,11 +58,12 @@ void * multiplication(void *arg) {
     double elapsed = seconds + nanoseconds*1e-9;
     
 	fprintf(res_file, "%.3f\n", elapsed);
+	printf("%f\n", elapsed);
 }
 
 int main(int argc, char const *argv[]) {
 	long int i, j;
-	pthread_t tid[10];
+	pthread_t tid[20];
 
 	// First matrix
 	fptr = fopen(argv[1], "r");
@@ -117,13 +116,14 @@ int main(int argc, char const *argv[]) {
 	// Setting the size of the result matrix
 	res.resize(m1, vector<int>(n2));
 
-	number_threads = atoi(argv[3]);
+	int p = atoi(argv[3]);
+	number_threads = (n1*m2)/p;
 
 
 	FILE *files[number_threads];
 	for(int i = 0; i < number_threads; i++) {
-		char filename[20];
-		sprintf(filename, "results%d.txt", i);
+		char filename[40];
+		sprintf(filename, "data/thread/results%d.txt", i);
 		files[i] = fopen(filename, "w");
 	}	
 

@@ -68,12 +68,14 @@ int main(int argc, char const *argv[]) {
 	// Setting the size of the result matrix
 	res.resize(m1, vector<int>(n2));
 
-	int number_process = atoi(argv[3]);
+	int p = atoi(argv[3]);
+	int number_process = (n1*m2)/p;
 
 	FILE *files[number_process];
 	for(int i = 0; i < number_process; i++) {
-		char filename[20];
-		sprintf(filename, "results%d.txt", i);
+		char filename[40];
+		sprintf(filename, "data/process/results%d.txt", i);
+
 		files[i] = fopen(filename, "w");
 	}	
 
@@ -81,8 +83,8 @@ int main(int argc, char const *argv[]) {
 	for(int current_process = 0; current_process < number_process; current_process++) {
 		int i, j, k;
 		if(fork() == 0) {	
-			char filename[20];
-			sprintf(filename, "results%d.txt", current_process);
+			char filename[40];
+			sprintf(filename, "data/process/results%d.txt", current_process);
 			res_file = fopen(filename, "w");
 
 			// Indicates the dimensions in the file
@@ -113,12 +115,13 @@ int main(int argc, char const *argv[]) {
 		    double elapsed = seconds + nanoseconds*1e-9;
 		    
 			fprintf(res_file, "%.3f\n", elapsed);
+			printf("%f\n", elapsed);
 
 			exit(0);
 		}
 	}
 
-	for(int i = 0; i < number_process; i++) // loop will run n times (n=5)
+	for(int i = 0; i < number_process; i++) 
 		wait(NULL);
 
 }

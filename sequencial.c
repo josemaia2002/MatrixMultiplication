@@ -102,7 +102,7 @@ int main(int argc, char const *argv[]) {
     
     
 	// Writing the result to the file
-	fptr = fopen("result.txt", "w");
+	fptr = fopen("data/sequential/result.txt", "w");
 
 	if(fptr == NULL) {
 		printf("ERROR!\n");
@@ -120,6 +120,7 @@ int main(int argc, char const *argv[]) {
 		}
 	}
 	fprintf(fptr, "%.3f\n", elapsed);
+	printf("%f\n", elapsed);
 
 	fclose(fptr);
 
