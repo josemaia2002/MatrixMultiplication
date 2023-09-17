@@ -71,12 +71,10 @@ echo "1600"
 for run in {1..10}; do ./a.out m1.txt m2.txt 320000 && echo "########" ; done
 COMMENT
 
+echo "300"
+./aux 300 300 300 300
+for run in {1..10}; do ./proc m1.txt m2.txt 11250 && echo "########" ; done
 
-
-
-
-
-
-echo "1600"
-./aux 1600 1600 1600 1600
-for run in {1..10}; do ./proc m1.txt m2.txt 320000 && echo "########" ; done
+echo "500"
+./aux 500 500 500 500
+for run in {1..10}; do ./proc m1.txt m2.txt 31250 && echo "########" ; done
