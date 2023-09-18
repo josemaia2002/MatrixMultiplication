@@ -63,7 +63,7 @@ void * multiplication(void *arg) {
 
 int main(int argc, char const *argv[]) {
 	long int i, j;
-	pthread_t tid[20];
+	pthread_t tid[32];
 
 	// First matrix
 	fptr = fopen(argv[1], "r");

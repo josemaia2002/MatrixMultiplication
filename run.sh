@@ -71,10 +71,54 @@ echo "1600"
 for run in {1..10}; do ./a.out m1.txt m2.txt 320000 && echo "########" ; done
 COMMENT
 
-echo "300"
-./aux 300 300 300 300
-for run in {1..10}; do ./proc m1.txt m2.txt 11250 && echo "########" ; done
+# 80000 160000 320000 640000 1280000
 
-echo "500"
-./aux 500 500 500 500
-for run in {1..10}; do ./proc m1.txt m2.txt 31250 && echo "########" ; done
+
+
+# Process
+: << COMMENT
+echo "1600;80000"
+./aux 1600 1600 1600 1600
+for run in {1..10}; do ./proc m1.txt m2.txt 80000 && echo "########" ; done
+
+echo "1600;160000"
+./aux 1600 1600 1600 1600
+for run in {1..10}; do ./proc m1.txt m2.txt 160000 && echo "########" ; done
+
+echo "1600;320000"
+./aux 1600 1600 1600 1600
+for run in {1..10}; do ./proc m1.txt m2.txt 320000 && echo "########" ; done
+
+echo "1600;640000"
+./aux 1600 1600 1600 1600
+for run in {1..10}; do ./proc m1.txt m2.txt 640000 && echo "########" ; done
+
+echo "1600;1280000"
+./aux 1600 1600 1600 1600
+for run in {1..10}; do ./proc m1.txt m2.txt 1280000 && echo "########" ; done
+COMMENT
+
+
+
+# Thread
+: << COMMENT
+echo "1600;80000"
+./aux 1600 1600 1600 1600
+for run in {1..10}; do ./a.out m1.txt m2.txt 80000 && echo "########" ; done
+
+echo "1600;160000"
+./aux 1600 1600 1600 1600
+for run in {1..10}; do ./a.out m1.txt m2.txt 160000 && echo "########" ; done
+
+echo "1600;320000"
+./aux 1600 1600 1600 1600
+for run in {1..10}; do ./a.out m1.txt m2.txt 320000 && echo "########" ; done
+
+echo "1600;640000"
+./aux 1600 1600 1600 1600
+for run in {1..10}; do ./a.out m1.txt m2.txt 640000 && echo "########" ; done
+
+echo "1600;1280000"
+./aux 1600 1600 1600 1600
+for run in {1..10}; do ./a.out m1.txt m2.txt 1280000 && echo "########" ; done
+COMMENT
