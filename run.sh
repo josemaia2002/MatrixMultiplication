@@ -75,7 +75,7 @@ COMMENT
 
 
 
-# Process
+# P Process
 : << COMMENT
 echo "1600;80000"
 ./aux 1600 1600 1600 1600
@@ -100,7 +100,7 @@ COMMENT
 
 
 
-# Thread
+# P Thread
 : << COMMENT
 echo "1600;80000"
 ./aux 1600 1600 1600 1600
@@ -122,3 +122,8 @@ echo "1600;1280000"
 ./aux 1600 1600 1600 1600
 for run in {1..10}; do ./a.out m1.txt m2.txt 1280000 && echo "########" ; done
 COMMENT
+
+
+echo "1600;1280000"
+./aux 1600 1600 1600 1600
+for run in {1..1}; do ./proc m1.txt m2.txt 1280000 && echo "########" ; done
